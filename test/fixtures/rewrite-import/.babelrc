@@ -1,0 +1,8 @@
+{
+  "plugins": ["../src"],
+  "extra": {
+    "fake-import-specifiers": [
+      "my-lib"
+    ]
+  }
+}

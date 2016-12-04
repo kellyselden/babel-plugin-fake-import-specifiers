@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-fake-import-specifiers",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Allow importing pieces while only exporting the whole object",
   "main": "src/index.js",
   "scripts": {
@@ -28,6 +28,8 @@
     "node": ">= 0.12.0"
   },
   "greenkeeper": {
-    "ignore": ["babel"]
+    "ignore": [
+      "babel"
+    ]
   }
 }

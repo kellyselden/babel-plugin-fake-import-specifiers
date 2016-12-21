@@ -16,16 +16,19 @@ function test(caseName) {
   var fixtureDir = path.join(fixturesDir, caseName);
   var actualPath = path.join(fixtureDir, 'actual.js');
   var expectedPath = path.join(fixtureDir, 'expected.js');
+  var actual;
+  var expected;
   try {
-    var actual = transformFileSync(actualPath).code;
-    var expected = fs.readFileSync(expectedPath).toString()
+    actual = transformFileSync(actualPath).code;
+    expected = fs.readFileSync(expectedPath).toString()
       .replace(/\r\n/g, '\n');
-    it('should ' + testName, function() {
-      expect(trim(actual)).to.equal(trim(expected));
-    });
   } catch (err) {
     // empty folders
+    return;
   }
+  it('should ' + testName, function() {
+    expect(trim(actual)).to.equal(trim(expected));
+  });
 }
 
 describe('rewrites imports', function() {

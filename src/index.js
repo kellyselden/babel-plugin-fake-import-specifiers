@@ -1,16 +1,39 @@
 'use strict';
 
+function convertDasherizedToCamelized(str) {
+  return str.split('-').reduce(function(str, chunk) {
+    if (str === '') {
+      str = chunk;
+    } else {
+      str += chunk.substr(0, 1).toUpperCase() + chunk.substr(1);
+    }
+    return str;
+  }, '');
+}
+
 module.exports = function(babel) {
   var Plugin = babel.Plugin;
   var t = babel.types;
 
   var sourcesToFake;
   var defaultSpecifierLookup;
+  var newIdentifierLookup;
 
   var visitor = {
     ImportDeclaration: function(node, parent, scope, file) {
-      if (sourcesToFake.indexOf(node.source.value) === -1) {
-        return;
+      let value = node.source.value;
+      let sourceMinusOne;
+      let dasherizedPackageName;
+      if (sourcesToFake.indexOf(value) === -1) {
+        // try to match a partial import
+        // ex: source = 'my-lib'
+        // import aPackage from 'my-lib/a-package';
+        let lastSlashIndex = value.lastIndexOf('/');
+        sourceMinusOne = value.substr(0, lastSlashIndex);
+        if (sourcesToFake.indexOf(sourceMinusOne) === -1) {
+          return;
+        }
+        dasherizedPackageName = value.substr(lastSlashIndex + 1);
       }
 
       var defaultSpecifierIndentifier;
@@ -26,25 +49,49 @@ module.exports = function(babel) {
         if (t.isImportDefaultSpecifier(specifier)) {
           defaultSpecifierIndentifier = specifier.local;
           defaultSpecifier = specifier;
-          break;
+        } else if (dasherizedPackageName) {
+          // ignore partial match imports with non default specifiers
+          // ex: source = 'my-lib'
+          // import { anotherPackage } from 'my-lib/a-package';
+          return;
         }
+      }
+
+      function generateNewDefaultSpecifier() {
+        defaultSpecifierIndentifier = scope.generateUidIdentifier();
+        defaultSpecifier = t.importDefaultSpecifier(defaultSpecifierIndentifier);
       }
 
       var hasSpecifiers;
 
-      specifiers.forEach(function(specifier) {
-        if (!t.isImportSpecifier(specifier)) {
-          return;
-        }
-
-        if (!defaultSpecifierIndentifier) {
-          defaultSpecifierIndentifier = scope.generateUidIdentifier();
-          defaultSpecifier = t.importDefaultSpecifier(defaultSpecifierIndentifier);
-        }
-
-        defaultSpecifierLookup[specifier.local.name] = defaultSpecifierIndentifier;
+      function addSpecifierToLookup(name) {
+        defaultSpecifierLookup[name] = defaultSpecifierIndentifier;
         hasSpecifiers = true;
-      });
+      }
+
+      if (dasherizedPackageName) {
+        node.source.value = sourceMinusOne;
+
+        let oldName = defaultSpecifierIndentifier.name;
+        let name = convertDasherizedToCamelized(dasherizedPackageName);
+        newIdentifierLookup[oldName] = name;
+
+        generateNewDefaultSpecifier();
+
+        addSpecifierToLookup(oldName);
+      } else {
+        specifiers.forEach(function(specifier) {
+          if (!t.isImportSpecifier(specifier)) {
+            return;
+          }
+
+          if (!defaultSpecifierIndentifier) {
+            generateNewDefaultSpecifier();
+          }
+
+          addSpecifierToLookup(specifier.local.name);
+        });
+      }
 
       if (hasSpecifiers) {
         node.specifiers = [defaultSpecifier];
@@ -62,6 +109,11 @@ module.exports = function(babel) {
         return;
       }
 
+      var newIdentifier = newIdentifierLookup[name];
+      if (newIdentifier) {
+        name = newIdentifier;
+      }
+
       return this.replaceWith(
         t.callExpression(
           t.memberExpression(
@@ -75,6 +127,7 @@ module.exports = function(babel) {
     Program: function(node, parent, scope, file) {
       sourcesToFake = file.opts.extra['fake-import-specifiers'] || [];
       defaultSpecifierLookup = {};
+      newIdentifierLookup = {};
     }
   };
 

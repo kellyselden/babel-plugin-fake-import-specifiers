@@ -11,6 +11,8 @@ function trim(str) {
 
 var fixturesDir = path.join(__dirname, 'fixtures');
 
+var testCount = 0;
+
 function test(caseName) {
   var testName = caseName.split('-').join(' ');
   var fixtureDir = path.join(fixturesDir, caseName);
@@ -26,6 +28,9 @@ function test(caseName) {
     // empty folders
     return;
   }
+
+  testCount++;
+
   it('should ' + testName, function() {
     expect(trim(actual)).to.equal(trim(expected));
   });
@@ -33,6 +38,7 @@ function test(caseName) {
 
 describe('rewrites imports', function() {
   var caseNames = fs.readdirSync(fixturesDir);
+
   var only = caseNames.filter(function(caseName) {
     return caseName.indexOf('_') === 0;
   });
@@ -41,4 +47,8 @@ describe('rewrites imports', function() {
   }
 
   caseNames.forEach(test);
+
+  if (!testCount) {
+    throw new Error('no tests were run');
+  }
 });

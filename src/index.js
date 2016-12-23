@@ -21,14 +21,14 @@ module.exports = function(babel) {
 
   var visitor = {
     ImportDeclaration: function(node, parent, scope, file) {
-      let value = node.source.value;
-      let sourceMinusOne;
-      let dasherizedPackageName;
+      var value = node.source.value;
+      var sourceMinusOne;
+      var dasherizedPackageName;
       if (sourcesToFake.indexOf(value) === -1) {
         // try to match a partial import
         // ex: source = 'my-lib'
         // import aPackage from 'my-lib/a-package';
-        let lastSlashIndex = value.lastIndexOf('/');
+        var lastSlashIndex = value.lastIndexOf('/');
         sourceMinusOne = value.substr(0, lastSlashIndex);
         if (sourcesToFake.indexOf(sourceMinusOne) === -1) {
           return;
@@ -72,8 +72,8 @@ module.exports = function(babel) {
       if (dasherizedPackageName) {
         node.source.value = sourceMinusOne;
 
-        let oldName = defaultSpecifierIndentifier.name;
-        let name = convertDasherizedToCamelized(dasherizedPackageName);
+        var oldName = defaultSpecifierIndentifier.name;
+        var name = convertDasherizedToCamelized(dasherizedPackageName);
         newIdentifierLookup[oldName] = name;
 
         generateNewDefaultSpecifier();

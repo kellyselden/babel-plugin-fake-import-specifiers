@@ -4,7 +4,7 @@
   "description": "Allow importing pieces while only exporting the whole object",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "eslint-mocha --eslint-args=\"src/**/*.js test/*.js\""
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,8 @@
   "devDependencies": {
     "babel": "^5.0.0",
     "chai": "^3.0.0",
+    "eslint": "^3.0.0",
+    "eslint-mocha": "0.1.0",
     "mocha": "^3.0.0"
   },
   "engines": {

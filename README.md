@@ -11,4 +11,4 @@ Allow importing pieces while only exporting the whole object
 
 To test a single fixture folder, prefix the folder name with an underscore.
 
-"test/fixtures/rewrite_import" => "test/fixtures/_rewrite_import"
+"test/fixtures/rewrite-import" => "test/fixtures/_rewrite-import"

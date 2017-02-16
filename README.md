@@ -6,3 +6,9 @@
 [![npm version](https://badge.fury.io/js/babel-plugin-fake-import-specifiers.svg)](https://badge.fury.io/js/babel-plugin-fake-import-specifiers)
 
 Allow importing pieces while only exporting the whole object
+
+## Tests
+
+To test a single fixture folder, prefix the folder name with an underscore.
+
+"test/fixtures/rewrite_import" => "test/fixtures/_rewrite_import"

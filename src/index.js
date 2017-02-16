@@ -20,7 +20,7 @@ module.exports = function(babel) {
   var newIdentifierLookup;
 
   var visitor = {
-    ImportDeclaration: function(node, parent, scope, file) {
+    ImportDeclaration: function(node, parent, scope) {
       var value = node.source.value;
       var sourceMinusOne;
       var dasherizedPackageName;
@@ -97,7 +97,7 @@ module.exports = function(babel) {
         node.specifiers = [defaultSpecifier];
       }
     },
-    CallExpression: function(node, parent, scope, file) {
+    CallExpression: function(node) {
       var callee = node.callee;
       if (callee.type !== 'Identifier') {
         return;

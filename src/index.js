@@ -126,7 +126,7 @@ module.exports = function(babel) {
     },
     Program: function(node, parent, scope, file) {
       sourcesToFake = file.opts.extra['fake-import-specifiers'] || [];
-      defaultSpecifierLookup = {};
+      defaultSpecifierLookup = Object.create(null);
       newIdentifierLookup = {};
     }
   };

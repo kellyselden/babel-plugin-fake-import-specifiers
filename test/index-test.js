@@ -25,6 +25,10 @@ function test(caseName) {
     expected = fs.readFileSync(expectedPath).toString()
       .replace(/\r\n/g, '\n');
   } catch (err) {
+    if (err._babel) {
+      throw err;
+    }
+
     // empty folders
     return;
   }

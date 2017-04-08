@@ -23,7 +23,7 @@
     "babel": "^5.0.0",
     "chai": "^3.0.0",
     "eslint": "^3.0.0",
-    "eslint-mocha": "0.1.0",
+    "eslint-mocha": "0.2.0",
     "mocha": "^3.0.0"
   },
   "engines": {

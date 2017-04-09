@@ -4,7 +4,10 @@
   "description": "Allow importing pieces while only exporting the whole object",
   "main": "src/index.js",
   "scripts": {
-    "test": "eslint-mocha --eslint-args=\"src/**/*.js test/*.js\""
+    "test": "eslint-mocha --eslint-args=\"src test/*.js\"",
+    "prelint": "eslint --version",
+    "lint": "eslint src test/*.js",
+    "lint:fix": "npm run lint -- --fix"
   },
   "repository": {
     "type": "git",

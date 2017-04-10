@@ -12,23 +12,23 @@ function convertDasherizedToCamelized(str) {
 }
 
 module.exports = function(babel) {
-  var Plugin = babel.Plugin;
-  var t = babel.types;
+  let Plugin = babel.Plugin;
+  let t = babel.types;
 
-  var sourcesToFake;
-  var defaultSpecifierLookup;
-  var newIdentifierLookup;
+  let sourcesToFake;
+  let defaultSpecifierLookup;
+  let newIdentifierLookup;
 
-  var visitor = {
+  let visitor = {
     ImportDeclaration: function(node, parent, scope) {
-      var value = node.source.value;
-      var sourceMinusOne;
-      var dasherizedPackageName;
+      let value = node.source.value;
+      let sourceMinusOne;
+      let dasherizedPackageName;
       if (sourcesToFake.indexOf(value) === -1) {
         // try to match a partial import
         // ex: source = 'my-lib'
         // import aPackage from 'my-lib/a-package';
-        var lastSlashIndex = value.lastIndexOf('/');
+        let lastSlashIndex = value.lastIndexOf('/');
         sourceMinusOne = value.substr(0, lastSlashIndex);
         if (sourcesToFake.indexOf(sourceMinusOne) === -1) {
           return;
@@ -36,16 +36,16 @@ module.exports = function(babel) {
         dasherizedPackageName = value.substr(lastSlashIndex + 1);
       }
 
-      var defaultSpecifierIndentifier;
-      var defaultSpecifier;
-      var specifiers = node.specifiers;
+      let defaultSpecifierIndentifier;
+      let defaultSpecifier;
+      let specifiers = node.specifiers;
 
-      for (var i in specifiers) {
+      for (let i in specifiers) {
         if (!Object.prototype.hasOwnProperty.call(specifiers, i)) {
           continue;
         }
 
-        var specifier = specifiers[i];
+        let specifier = specifiers[i];
         if (t.isImportDefaultSpecifier(specifier)) {
           defaultSpecifierIndentifier = specifier.local;
           defaultSpecifier = specifier;
@@ -62,7 +62,7 @@ module.exports = function(babel) {
         defaultSpecifier = t.importDefaultSpecifier(defaultSpecifierIndentifier);
       }
 
-      var hasSpecifiers;
+      let hasSpecifiers;
 
       function addSpecifierToLookup(name) {
         defaultSpecifierLookup[name] = defaultSpecifierIndentifier;
@@ -72,8 +72,8 @@ module.exports = function(babel) {
       if (dasherizedPackageName) {
         node.source.value = sourceMinusOne;
 
-        var oldName = defaultSpecifierIndentifier.name;
-        var name = convertDasherizedToCamelized(dasherizedPackageName);
+        let oldName = defaultSpecifierIndentifier.name;
+        let name = convertDasherizedToCamelized(dasherizedPackageName);
         newIdentifierLookup[oldName] = name;
 
         generateNewDefaultSpecifier();
@@ -98,18 +98,18 @@ module.exports = function(babel) {
       }
     },
     CallExpression: function(node) {
-      var callee = node.callee;
+      let callee = node.callee;
       if (callee.type !== 'Identifier') {
         return;
       }
 
-      var name = callee.name;
-      var defaultSpecifierIndentifier = defaultSpecifierLookup[name];
+      let name = callee.name;
+      let defaultSpecifierIndentifier = defaultSpecifierLookup[name];
       if (!defaultSpecifierIndentifier) {
         return;
       }
 
-      var newIdentifier = newIdentifierLookup[name];
+      let newIdentifier = newIdentifierLookup[name];
       if (newIdentifier) {
         name = newIdentifier;
       }

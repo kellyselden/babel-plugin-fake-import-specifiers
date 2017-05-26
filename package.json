@@ -24,7 +24,7 @@
   "homepage": "https://github.com/kellyselden/babel-plugin-fake-import-specifiers#readme",
   "devDependencies": {
     "babel": "^5.0.0",
-    "chai": "^3.0.0",
+    "chai": "^4.0.0",
     "eslint": "^3.0.0",
     "eslint-config-sane": "^0.1.0",
     "eslint-mocha": "0.2.2",

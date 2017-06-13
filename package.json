@@ -4,7 +4,8 @@
   "description": "Allow importing pieces while only exporting the whole object",
   "main": "src/index.js",
   "scripts": {
-    "test": "eslint-mocha --eslint-args=\"src test/*.js\"",
+    "test": "mocha",
+    "posttest": "npm run lint",
     "prelint": "eslint --version",
     "lint": "eslint src test/*.js",
     "lint:fix": "npm run lint -- --fix"
@@ -27,7 +28,6 @@
     "chai": "^4.0.0",
     "eslint": "^3.0.0",
     "eslint-config-sane": "^0.1.0",
-    "eslint-mocha": "0.2.2",
     "mocha": "^3.0.0"
   },
   "engines": {

@@ -27,7 +27,7 @@
     "babel": "^5.0.0",
     "chai": "^4.0.0",
     "eslint": "^4.0.0",
-    "eslint-config-sane": "^0.1.0",
+    "eslint-config-sane": "^0.2.0",
     "mocha": "^3.0.0"
   },
   "engines": {

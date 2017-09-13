@@ -114,15 +114,13 @@ module.exports = function(babel) {
         name = newIdentifier;
       }
 
-      return this.replaceWith(
-        t.callExpression(
-          t.memberExpression(
-            defaultSpecifierIndentifier,
-            t.identifier(name)
-          ),
-          node.arguments
-        )
-      );
+      return this.replaceWith(t.callExpression(
+        t.memberExpression(
+          defaultSpecifierIndentifier,
+          t.identifier(name)
+        ),
+        node.arguments
+      ));
     },
     Program: function(node, parent, scope, file) {
       sourcesToFake = file.opts.extra['fake-import-specifiers'] || [];

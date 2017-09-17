@@ -14,8 +14,6 @@ function trim(str) {
   return str.replace(/^\s+|\s+$/, '');
 }
 
-let testCount = 0;
-
 describe('rewrites imports', function() {
   forEachDir((it, caseName) => {
     let testName = caseName.split('-').join(' ');
@@ -37,14 +35,8 @@ describe('rewrites imports', function() {
       return;
     }
 
-    testCount++;
-
     it(`should ${testName}`, function() {
       expect(trim(actual)).to.equal(trim(expected));
     });
   });
-
-  if (!testCount) {
-    throw new Error('no tests were run');
-  }
 });

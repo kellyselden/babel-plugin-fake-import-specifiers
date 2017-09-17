@@ -20,20 +20,9 @@ describe('rewrites imports', function() {
     let fixtureDir = path.join(fixturesDir, caseName);
     let actualPath = path.join(fixtureDir, 'actual.js');
     let expectedPath = path.join(fixtureDir, 'expected.js');
-    let actual;
-    let expected;
-    try {
-      actual = transformFileSync(actualPath).code;
-      expected = fs.readFileSync(expectedPath).toString()
-        .replace(/\r\n/g, '\n');
-    } catch (err) {
-      if (err._babel) {
-        throw err;
-      }
-
-      // empty folders
-      return;
-    }
+    let actual = transformFileSync(actualPath).code;
+    let expected = fs.readFileSync(expectedPath).toString()
+      .replace(/\r\n/g, '\n');
 
     it(`should ${testName}`, function() {
       expect(trim(actual)).to.equal(trim(expected));

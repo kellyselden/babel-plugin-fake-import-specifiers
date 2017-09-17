@@ -5,11 +5,11 @@ const fs = require('fs');
 const expect = require('chai').expect;
 const transformFileSync = require('babel').transformFileSync;
 
+const fixturesDir = path.join(__dirname, 'fixtures');
+
 function trim(str) {
   return str.replace(/^\s+|\s+$/, '');
 }
-
-let fixturesDir = path.join(__dirname, 'fixtures');
 
 let testCount = 0;
 
@@ -35,7 +35,7 @@ function test(caseName) {
 
   testCount++;
 
-  it('should ' + testName, function() {
+  it(`should ${testName}`, function() {
     expect(trim(actual)).to.equal(trim(expected));
   });
 }

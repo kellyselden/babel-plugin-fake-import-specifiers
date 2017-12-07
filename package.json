@@ -27,7 +27,7 @@
     "babel": "^5.0.0",
     "chai": "^4.0.0",
     "eslint": "^4.0.0",
-    "eslint-config-sane": "^0.3.0",
+    "eslint-config-sane": "^0.4.2",
     "eslint-plugin-prefer-let": "^1.0.1",
     "fixture-skipper": "^1.2.0",
     "mocha": "^4.0.0"

@@ -20,7 +20,7 @@ module.exports = function(babel) {
   let newIdentifierLookup;
 
   let visitor = {
-    ImportDeclaration: function(node, parent, scope) {
+    ImportDeclaration(node, parent, scope) {
       let value = node.source.value;
       let sourceMinusOne;
       let dasherizedPackageName;
@@ -97,7 +97,7 @@ module.exports = function(babel) {
         node.specifiers = [defaultSpecifier];
       }
     },
-    CallExpression: function(node) {
+    CallExpression(node) {
       let callee = node.callee;
       if (callee.type !== 'Identifier') {
         return;
@@ -124,7 +124,7 @@ module.exports = function(babel) {
         )
       );
     },
-    Program: function(node, parent, scope, file) {
+    Program(node, parent, scope, file) {
       sourcesToFake = file.opts.extra['fake-import-specifiers'] || [];
       defaultSpecifierLookup = Object.create(null);
       newIdentifierLookup = {};
@@ -132,6 +132,6 @@ module.exports = function(babel) {
   };
 
   return new Plugin('babel-plugin-fake-import-specifiers', {
-    visitor: visitor
+    visitor
   });
 };

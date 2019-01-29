@@ -2,9 +2,9 @@
 
 const path = require('path');
 const fs = require('fs');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const fixtureSkipper = require('fixture-skipper');
-const transformFileSync = require('babel').transformFileSync;
+const { transformFileSync } = require('babel');
 
 const fixturesDir = path.join(__dirname, 'fixtures');
 

@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-fake-import-specifiers",
-  "version": "1.1.3",
+  "version": "2.0.0",
   "description": "Allow importing pieces while only exporting the whole object",
   "main": "src/index.js",
   "scripts": {

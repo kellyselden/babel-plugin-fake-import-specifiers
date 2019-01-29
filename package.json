@@ -33,7 +33,7 @@
     "mocha": "^5.0.4"
   },
   "engines": {
-    "node": ">= 4"
+    "node": ">= 6"
   },
   "greenkeeper": {
     "ignore": [

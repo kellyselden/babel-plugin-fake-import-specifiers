@@ -1,7 +1,7 @@
 'use strict';
 
 function convertDasherizedToCamelized(str) {
-  return str.split('-').reduce(function(str, chunk) {
+  return str.split('-').reduce((str, chunk) => {
     if (str === '') {
       str = chunk;
     } else {
@@ -11,26 +11,26 @@ function convertDasherizedToCamelized(str) {
   }, '');
 }
 
-module.exports = function(babel) {
-  let Plugin = babel.Plugin;
-  let t = babel.types;
-
+module.exports = function FakeImportSpecifiers({
+  Plugin,
+  types: t
+}) {
   let sourcesToFake;
   let defaultSpecifierLookup;
   let newIdentifierLookup;
 
   let visitor = {
     ImportDeclaration(node, parent, scope) {
-      let value = node.source.value;
+      let { value } = node.source;
       let sourceMinusOne;
       let dasherizedPackageName;
-      if (sourcesToFake.indexOf(value) === -1) {
+      if (!sourcesToFake.includes(value)) {
         // try to match a partial import
         // ex: source = 'my-lib'
         // import aPackage from 'my-lib/a-package';
         let lastSlashIndex = value.lastIndexOf('/');
         sourceMinusOne = value.substr(0, lastSlashIndex);
-        if (sourcesToFake.indexOf(sourceMinusOne) === -1) {
+        if (!sourcesToFake.includes(sourceMinusOne)) {
           return;
         }
         dasherizedPackageName = value.substr(lastSlashIndex + 1);
@@ -38,7 +38,7 @@ module.exports = function(babel) {
 
       let defaultSpecifierIndentifier;
       let defaultSpecifier;
-      let specifiers = node.specifiers;
+      let { specifiers } = node;
 
       for (let i in specifiers) {
         if (!Object.prototype.hasOwnProperty.call(specifiers, i)) {
@@ -80,7 +80,7 @@ module.exports = function(babel) {
 
         addSpecifierToLookup(oldName);
       } else {
-        specifiers.forEach(function(specifier) {
+        specifiers.forEach(specifier => {
           if (!t.isImportSpecifier(specifier)) {
             return;
           }
@@ -98,12 +98,12 @@ module.exports = function(babel) {
       }
     },
     CallExpression(node) {
-      let callee = node.callee;
+      let { callee } = node;
       if (callee.type !== 'Identifier') {
         return;
       }
 
-      let name = callee.name;
+      let { name } = callee;
       let defaultSpecifierIndentifier = defaultSpecifierLookup[name];
       if (!defaultSpecifierIndentifier) {
         return;
